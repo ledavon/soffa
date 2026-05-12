@@ -626,7 +626,13 @@ Je suis toujours animé par la même passion : concevoir du mobilier juste, dura
   <section id="collection" class="section-bg-white">
     <div class="container">
       <p class="section-label">Catalogue 2026</p>
-      <h2>Notre Collection</h2>
+      <h2>Notre Collection <button id="btnCarousel" title="Vue carrousel" onclick="openCarousel(0)" style="
+        background:none; border:2px solid var(--accent); border-radius:50%;
+        width:2rem; height:2rem; cursor:pointer; vertical-align:middle;
+        margin-left:.6rem; color:var(--accent); font-size:1rem; line-height:1;
+        transition:background .2s,color .2s;
+      " onmouseover="this.style.background='var(--accent)';this.style.color='#fff'"
+         onmouseout="this.style.background='none';this.style.color='var(--accent)'">▶</button></h2>
       <div class="divider"></div>
       <div class="collection-intro">
         <p>Des créations conçues comme des pièces d'équilibre entre artisanat, design et confort. Chaque modèle peut être adapté à vos dimensions, votre tissu et votre coloris préférés.</p>
@@ -1215,7 +1221,122 @@ Je suis toujours animé par la même passion : concevoir du mobilier juste, dura
     <p>© 2026 Atelier SOFFA – Pablo Monclus &nbsp;·&nbsp; Canapés &amp; Fauteuils sur mesure &nbsp;·&nbsp; atelier.soffa@gmail.com</p>
   </footer>
 
-  <!-- Modale image produit -->
+  <!-- Carrousel produits -->
+  <div id="carouselModal" style="
+    display:none; position:fixed; inset:0; z-index:998;
+    background:rgba(0,0,0,.88); backdrop-filter:blur(8px);
+    align-items:center; justify-content:center; flex-direction:column;
+  " onclick="closeCarousel()">
+
+    <!-- Contenu cliquable non-fermant -->
+    <div onclick="event.stopPropagation()" style="
+      position:relative; width:min(92vw,860px);
+      display:flex; flex-direction:column; align-items:center; gap:1rem;
+    ">
+      <!-- Bouton fermer -->
+      <button onclick="closeCarousel()" style="
+        position:absolute; top:-2.5rem; right:0;
+        background:none; border:none; color:#fff; font-size:2rem;
+        cursor:pointer; line-height:1;
+      ">✕</button>
+
+      <!-- Image + nom -->
+      <div style="position:relative; width:100%; text-align:center;">
+        <img id="carouselImg" src="" alt="" style="
+          max-width:100%; max-height:62vh;
+          object-fit:contain; border-radius:12px;
+          box-shadow:0 24px 80px rgba(0,0,0,.7);
+        " />
+      </div>
+      <p id="carouselName" style="
+        color:#fff; font-size:1.25rem; letter-spacing:.08em;
+        font-family:'Georgia',serif; margin:0;
+      "></p>
+
+      <!-- Navigation -->
+      <div style="display:flex; align-items:center; gap:1.5rem; margin-top:.25rem;">
+        <button onclick="carouselPrev()" style="
+          background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+          color:#fff; border-radius:50%; width:2.8rem; height:2.8rem;
+          font-size:1.3rem; cursor:pointer; transition:background .2s;
+        " onmouseover="this.style.background='rgba(192,148,90,.7)'"
+           onmouseout="this.style.background='rgba(255,255,255,.12)'">‹</button>
+
+        <!-- Pastilles -->
+        <div id="carouselDots" style="display:flex; gap:.5rem;"></div>
+
+        <button onclick="carouselNext()" style="
+          background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+          color:#fff; border-radius:50%; width:2.8rem; height:2.8rem;
+          font-size:1.3rem; cursor:pointer; transition:background .2s;
+        " onmouseover="this.style.background='rgba(192,148,90,.7)'"
+           onmouseout="this.style.background='rgba(255,255,255,.12)'">›</button>
+      </div>
+
+      <!-- Compteur -->
+      <p id="carouselCounter" style="color:rgba(255,255,255,.45); font-size:.8rem; margin:0;"></p>
+    </div>
+  </div>
+
+  <script>
+    // ── Carrousel ──────────────────────────────────────────
+    let _carItems = [];
+    let _carIdx   = 0;
+
+    function buildCarouselItems() {
+      _carItems = [];
+      document.querySelectorAll('.product-card').forEach(card => {
+        const img  = card.querySelector('.product-img img');
+        const name = card.querySelector('.product-name');
+        if (img) _carItems.push({ src: img.src, alt: img.alt, name: name ? name.textContent : '' });
+      });
+    }
+
+    function openCarousel(idx) {
+      buildCarouselItems();
+      _carIdx = idx || 0;
+      renderCarousel();
+      document.getElementById('carouselModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCarousel() {
+      document.getElementById('carouselModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function renderCarousel() {
+      const item = _carItems[_carIdx];
+      document.getElementById('carouselImg').src   = item.src;
+      document.getElementById('carouselImg').alt   = item.alt;
+      document.getElementById('carouselName').textContent = item.name;
+      document.getElementById('carouselCounter').textContent = (_carIdx + 1) + ' / ' + _carItems.length;
+
+      // Pastilles
+      const dots = document.getElementById('carouselDots');
+      dots.innerHTML = '';
+      _carItems.forEach((_, i) => {
+        const d = document.createElement('button');
+        d.style.cssText = `width:${i===_carIdx?'22px':'8px'};height:8px;border-radius:4px;border:none;cursor:pointer;
+          background:${i===_carIdx?'#c0945a':'rgba(255,255,255,.35)'};transition:all .3s;padding:0;`;
+        d.onclick = () => { _carIdx = i; renderCarousel(); };
+        dots.appendChild(d);
+      });
+    }
+
+    function carouselNext() { _carIdx = (_carIdx + 1) % _carItems.length; renderCarousel(); }
+    function carouselPrev() { _carIdx = (_carIdx - 1 + _carItems.length) % _carItems.length; renderCarousel(); }
+
+    document.addEventListener('keydown', e => {
+      if (document.getElementById('carouselModal').style.display === 'flex') {
+        if (e.key === 'ArrowRight') carouselNext();
+        if (e.key === 'ArrowLeft')  carouselPrev();
+        if (e.key === 'Escape')     closeCarousel();
+      }
+    });
+    // ──────────────────────────────────────────────────────
+
+    // Modale image produit
   <div id="imgModal" style="
     display:none; position:fixed; inset:0; z-index:999;
     background:rgba(0,0,0,.82); backdrop-filter:blur(6px);
