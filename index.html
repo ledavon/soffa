@@ -1215,7 +1215,47 @@ Je suis toujours animé par la même passion : concevoir du mobilier juste, dura
     <p>© 2026 Atelier SOFFA – Pablo Monclus &nbsp;·&nbsp; Canapés &amp; Fauteuils sur mesure &nbsp;·&nbsp; atelier.soffa@gmail.com</p>
   </footer>
 
+  <!-- Modale image produit -->
+  <div id="imgModal" style="
+    display:none; position:fixed; inset:0; z-index:999;
+    background:rgba(0,0,0,.82); backdrop-filter:blur(6px);
+    align-items:center; justify-content:center;
+  " onclick="closeImgModal()">
+    <button onclick="closeImgModal()" style="
+      position:fixed; top:1.2rem; right:1.5rem;
+      background:none; border:none; color:#fff; font-size:2rem;
+      cursor:pointer; line-height:1; z-index:1000;
+    ">✕</button>
+    <img id="imgModalSrc" src="" alt="" style="
+      max-width:90vw; max-height:90vh;
+      object-fit:contain; border-radius:12px;
+      box-shadow:0 24px 80px rgba(0,0,0,.6);
+    " onclick="event.stopPropagation()" />
+  </div>
+
   <script>
+    // Modale image produit
+    function openImgModal(src, alt) {
+      const modal = document.getElementById('imgModal');
+      document.getElementById('imgModalSrc').src = src;
+      document.getElementById('imgModalSrc').alt = alt;
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeImgModal() {
+      document.getElementById('imgModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeImgModal(); });
+
+    // Ajout du clic sur chaque carte
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const img = card.querySelector('.product-img img');
+        if (img) openImgModal(img.src, img.alt);
+      });
+    });
+
     // Hamburger menu
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobileMenu');
