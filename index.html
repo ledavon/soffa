@@ -1222,11 +1222,7 @@ Je suis toujours animé par la même passion : concevoir du mobilier juste, dura
   </footer>
 
   <!-- Carrousel produits -->
-  <div id="carouselModal" style="
-    display:none; position:fixed; inset:0; z-index:998;
-    background:rgba(0,0,0,.88); backdrop-filter:blur(8px);
-    align-items:center; justify-content:center; flex-direction:column;
-  " onclick="closeCarousel()">
+  <div id="carouselModal" style="display:none; position:fixed; inset:0; z-index:998;background:rgba(0,0,0,.88); backdrop-filter:blur(8px);align-items:center; justify-content:center; flex-direction:column;" onclick="closeCarousel()">
 
     <!-- Contenu cliquable non-fermant -->
     <div onclick="event.stopPropagation()" style="
@@ -1335,23 +1331,12 @@ Je suis toujours animé par la même passion : concevoir du mobilier juste, dura
       }
     });
     // ──────────────────────────────────────────────────────
+  </script>
 
-    // Modale image produit
-  <div id="imgModal" style="
-    display:none; position:fixed; inset:0; z-index:999;
-    background:rgba(0,0,0,.82); backdrop-filter:blur(6px);
-    align-items:center; justify-content:center;
-  " onclick="closeImgModal()">
-    <button onclick="closeImgModal()" style="
-      position:fixed; top:1.2rem; right:1.5rem;
-      background:none; border:none; color:#fff; font-size:2rem;
-      cursor:pointer; line-height:1; z-index:1000;
-    ">✕</button>
-    <img id="imgModalSrc" src="" alt="" style="
-      max-width:90vw; max-height:90vh;
-      object-fit:contain; border-radius:12px;
-      box-shadow:0 24px 80px rgba(0,0,0,.6);
-    " onclick="event.stopPropagation()" />
+  <!-- Modale image produit -->
+  <div id="imgModal" style="display:none; position:fixed; inset:0; z-index:999;background:rgba(0,0,0,.82); backdrop-filter:blur(6px); align-items:center; justify-content:center;" onclick="closeImgModal()">
+    <button onclick="closeImgModal()" style="position:fixed; top:1.2rem; right:1.5rem;background:none; border:none; color:#fff; font-size:2rem;cursor:pointer; line-height:1; z-index:1000;">✕</button>
+    <img id="imgModalSrc" src="" alt="" style="max-width:90vw; max-height:90vh;object-fit:contain; border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.6);" onclick="event.stopPropagation()" />
   </div>
 
   <script>
